@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Recomendações Netflix</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #111;
+      color: #eee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      font-size: 1em;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #e50914;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .resultados {
+      margin-top: 30px;
+      max-width: 600px;
+      text-align: left;
+    }
+    .recomendacao {
+      margin-bottom: 20px;
+      padding: 10px;
+      border-bottom: 1px solid #444;
+    }
+    .recomendacao h3 {
+      margin: 0;
+      color: #fff;
+    }
+    .recomendacao p {
+      margin: 5px 0 0;
+      font-size: 0.9em;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Recomendações Netflix</h1>
+  <input type="text" id="titulo" placeholder="Digite o título">
+  <button onclick="buscar()">Buscar</button>
+
+  <div class="resultados" id="resultados"></div>
+
+  <script>
+    async function buscar() {
+      const titulo = document.getElementById("titulo").value;
+      const container = document.getElementById("resultados");
+      container.innerHTML = "Carregando...";
+
+      try {
+        const res = await fetch(`http://127.0.0.1:8000/recomendar/${encodeURIComponent(titulo)}`);
+        if (!res.ok) throw new Error("Título não encontrado.");
+        const data = await res.json();
+        container.innerHTML = "";
+
+        data.recomendacoes.forEach(r => {
+          const div = document.createElement("div");
+          div.className = "recomendacao";
+          div.innerHTML = `<h3>${r.title}</h3><p>${r.description}</p>`;
+          container.appendChild(div);
+        });
+      } catch (e) {
+        container.innerHTML = `<p style="color: red;">Erro: ${e.message}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
