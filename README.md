@@ -10,6 +10,8 @@ O projeto está estruturado da seguinte forma:
 ├── app/
 │   ├── __init__.py
 │   ├── data.py
+│   ├── model.py
+│   ├── utils.py
 │   └── model.py
 ├── data/
 │   └── netflix_titles.csv
